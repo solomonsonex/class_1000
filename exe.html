@@ -1,0 +1,126 @@
+<select name="" id="states" onchange="load_lga(this.value)">
+    <option value=""> -- Select States -- </option>
+</select>
+<select name="" id="lga" >
+    <option value=""> -- Select LGA -- </option>
+</select>
+<select name="" id="years" >
+    <option value=""> -- YEARS -- </option>
+</select>
+<br>
+<input type="text" id="value">
+<p id="text"></p>
+<select name="" id="type" onchange="converter(this.value)">
+    <option value=""> -- SELECT UNIT -- </option>
+</select>
+<script>
+
+    const states = [
+        { name: "Abia", capital: "Umuahia", lga: ["Aba North", "Aba South", "Arochukwu", "Bende", "Ikwuano", "Isiala Ngwa North", "Isiala Ngwa South", "Isuikwuato", "Obi Ngwa", "Ohafia", "Osisioma", "Ugwunagbo", "Ukwa East", "Ukwa West", "Umuahia North", "Umuahia South", "Umunneochi"] },
+        { name: "Adamawa", capital: "Yola", lga: ["Demsa", "Fufure", "Ganye", "Gayuk", "Gombi", "Grei", "Hong", "Jada", "Lamurde", "Madagali", "Maiha", "Mayo Belwa", "Michika", "Mubi North", "Mubi South", "Numan", "Shelleng", "Song", "Toungo", "Yola North", "Yola South"] },
+        { name: "Akwa Ibom", capital: "Uyo", lga: ["Abak", "Eastern Obolo", "Eket", "Esit Eket", "Essien Udim", "Etim Ekpo", "Etinan", "Ibeno", "Ibesikpo Asutan", "Ibiono-Ibom", "Ika", "Ikono", "Ikot Abasi", "Ikot Ekpene", "Ini", "Itu", "Mbo", "Mkpat-Enin", "Nsit-Atai", "Nsit-Ibom", "Nsit-Ubium", "Obot Akara", "Okobo", "Onna", "Oron", "Oruk Anam", "Udung-Uko", "Ukanafun", "Uruan", "Urue-Offong/Oruko", "Uyo"] },
+        { name: "Anambra", capital: "Awka", lga: ["Aguata", "Anambra East", "Anambra West", "Anaocha", "Awka North", "Awka South", "Ayamelum", "Dunukofia", "Ekwusigo", "Idemili North", "Idemili South", "Ihiala", "Njikoka", "Nnewi North", "Nnewi South", "Ogbaru", "Onitsha North", "Onitsha South", "Orumba North", "Orumba South", "Oyi"] },
+        { name: "Bauchi", capital: "Bauchi", lga: ["Alkaleri", "Bauchi", "Bogoro", "Damban", "Darazo", "Dass", "Gamawa", "Ganjuwa", "Giade", "Itas/Gadau", "Jama'are", "Katagum", "Kirfi", "Misau", "Ningi", "Shira", "Tafawa Balewa", "Toro", "Warji", "Zaki"] },
+        { name: "Bayelsa", capital: "Yenagoa", lga: ["Brass", "Ekeremor", "Kolokuma/Opokuma", "Nembe", "Ogbia", "Sagbama", "Southern Ijaw", "Yenagoa"] },
+        { name: "Benue", capital: "Makurdi", lga: ["Agatu", "Apa", "Ado", "Buruku", "Gboko", "Guma", "Gwer East", "Gwer West", "Katsina-Ala", "Konshisha", "Kwande", "Logo", "Makurdi", "Obi", "Ogbadibo", "Ohimini", "Oju", "Okpokwu", "Oturkpo", "Tarka", "Ukum", "Ushongo", "Vandeikya"] },
+        { name: "Borno", capital: "Maiduguri", lga: ["Abadam", "Askira/Uba", "Bama", "Bayo", "Biu", "Chibok", "Damboa", "Dikwa", "Gubio", "Guzamala", "Gwoza", "Hawul", "Jere", "Kaga", "Kala/Balge", "Konduga", "Kukawa", "Kwaya Kusar", "Mafa", "Magumeri", "Maiduguri", "Marte", "Mobbar", "Monguno", "Ngala", "Nganzai", "Shani"] },
+        { name: "Cross River", capital: "Calabar", lga: ["Abi", "Akamkpa", "Akpabuyo", "Bakassi", "Bekwarra", "Biase", "Boki", "Calabar Municipal", "Calabar South", "Etung", "Ikom", "Obanliku", "Obubra", "Obudu", "Odukpani", "Ogoja", "Yakuur", "Yala"] },
+        { name: "Delta", capital: "Asaba", lga: ["Aniocha North", "Aniocha South", "Bomadi", "Burutu", "Ethiope East", "Ethiope West", "Ika North East", "Ika South", "Isoko North", "Isoko South", "Ndokwa East", "Ndokwa West", "Okpe", "Oshimili North", "Oshimili South", "Patani", "Sapele", "Udu", "Ughelli North", "Ughelli South", "Ukwuani", "Uvwie", "Warri North", "Warri South", "Warri South West"] },
+        { name: "Ebonyi", capital: "Abakaliki", lga: ["Abakaliki", "Afikpo North", "Afikpo South", "Ebonyi", "Ezza North", "Ezza South", "Ikwo", "Ishielu", "Ivo", "Izzi", "Ohaozara", "Ohaukwu", "Onicha"] },
+        { name: "Edo", capital: "Benin City", lga: ["Akoko-Edo", "Egor", "Esan Central", "Esan North-East", "Esan South-East", "Esan West", "Etsako Central", "Etsako East", "Etsako West", "Igueben", "Ikpoba Okha", "Orhionmwon", "Oredo", "Ovia North-East", "Ovia South-West", "Owan East", "Owan West", "Uhunmwonde"] },
+        { name: "Ekiti", capital: "Ado Ekiti", lga: ["Ado Ekiti", "Efon", "Ekiti East", "Ekiti South-West", "Ekiti West", "Emure", "Gbonyin", "Ido Osi", "Ijero", "Ikere", "Ikole", "Ilejemeje", "Irepodun/Ifelodun", "Ise/Orun", "Moba", "Oye"] },
+        { name: "Enugu", capital: "Enugu", lga: ["Aninri", "Awgu", "Enugu East", "Enugu North", "Enugu South", "Ezeagu", "Igbo Etiti", "Igbo Eze North", "Igbo Eze South", "Isi Uzo", "Nkanu East", "Nkanu West", "Nsukka", "Oji River", "Udenu", "Udi", "Uzo-Uwani"] },
+        { name: "FCT", capital: "Abuja", lga: ["Abaji", "Bwari", "Gwagwalada", "Kuje", "Kwali", "Municipal Area Council (AMAC)"] },
+        { name: "Gombe", capital: "Gombe", lga: ["Akko", "Balanga", "Billiri", "Dukku", "Funakaye", "Gombe", "Kaltungo", "Kwami", "Nafada", "Shongom", "Yamaltu/Deba"] },
+        { name: "Imo", capital: "Owerri", lga: ["Aboh Mbaise", "Ahiazu Mbaise", "Ehime Mbano", "Ezinihitte", "Ideato North", "Ideato South", "Ihitte/Uboma", "Ikeduru", "Isiala Mbano", "Isu", "Mbaitoli", "Ngor Okpala", "Njaba", "Nkwerre", "Nwangele", "Obowo", "Oguta", "Ohaji/Egbema", "Okigwe", "Orlu", "Orsu", "Oru East", "Oru West", "Owerri Municipal", "Owerri North", "Owerri South", "Unuimo"] },
+        { name: "Jigawa", capital: "Dutse", lga: ["Auyo", "Babura", "Biriniwa", "Birnin Kudu", "Buji", "Dutse", "Gagarawa", "Garki", "Gumel", "Guri", "Gwaram", "Gwiwa", "Hadejia", "Jahun", "Kafinin Hausa", "Kaugama", "Kazaure", "Kiri Kasama", "Kiyawa", "Maigatari", "Malam Madori", "Miga", "Ringim", "Roni", "Sule Tankarkar", "Taura", "Yankwashi"] },
+        { name: "Kaduna", capital: "Kaduna", lga: ["Birnin Gwari", "Chikun", "Giwa", "Igabi", "Ikara", "Jaba", "Jema'a", "Kachia", "Kaduna North", "Kaduna South", "Kagarko", "Kajuru", "Kaura", "Kauru", "Kubau", "Kudan", "Lere", "Makarfi", "Sabon Gari", "Sanga", "Soba", "Zangon Kataf", "Zaria"] },
+        { name: "Kano", capital: "Kano", lga: ["Fagge", "Dala", "Gwale", "Kano Municipal", "Nasirawa", "Tarauni", "Ungogo", "Kumbotso", "Makoda", "Minjibir", "Gwarzo", "Karaye", "Rano", "Doguwa", "Danbatta", "Kiruni", "Rimin Gado", "Gaya", "Wudil", "Kura", "Bunkure", "Ajingi", "Albasu", "Babura", "Bagwai", "Bebeji", "Bichi", "Garki", "Gezawa", "Kabotso", "Kunchi", "Kura", "Madobi", "Nasarawa", "Rano", "Rimin Gado", "Rogo", "Shanono", "Sumaila", "Takai", "Tofa", "Tsanyawa", "Tudun Wada", "Warawa"] },
+        { name: "Katsina", capital: "Katsina", lga: ["Bakori", "Batagarawa", "Batsari", "Baure", "Bindawa", "Charanchi", "Dandume", "Danja", "Dan Musa", "Daura", "Dutsin Ma", "Faskari", "Funtua", "Ingawa", "Jibia", "Kafur", "Kaita", "Kankara", "Kankia", "Katsina", "Kurfi", "Kusada", "Mai'Adua", "Malumfashi", "Mani", "Mashi", "Matazu", "Musawa", "Rimi", "Sabuwa", "Safana", "Sandamu", "Zango"] },
+        { name: "Kebbi", capital: "Birnin Kebbi", lga: ["Aleiro", "Arewa Dandi", "Argungu", "Augie", "Bagudo", "Birnin Kebbi", "Bunza", "Dandi", "Fakai", "Gwandu", "Jega", "Kalgo", "Koko/Besse", "Maiyama", "Ngaski", "Sakaba", "Shanga", "Suru", "Wasagu/Danko", "Yauri", "Zuru"] },
+        { name: "Kogi", capital: "Lokoja", lga: ["Adavi", "Ajaokuta", "Ankpa", "Bassa", "Dekina", "Ibaji", "Idah", "Igalamela Odolu", "Ijumu", "Kabba/Bunu", "Kogi", "Lokoja", "Mopa Muro", "Ofu", "Ogori/Magongo", "Okehi", "Okene", "Olamaboro", "Omala", "Yagba East", "Yagba West"] },
+        { name: "Kwara", capital: "Ilorin", lga: ["Asa", "Baruten", "Edu", "Ekiti", "Ifelodun", "Ilorin East", "Ilorin South", "Ilorin West", "Irepodun", "Isin", "Kaiama", "Moro", "Offa", "Oke Ero", "Oyun", "Pategi"] },
+        { name: "Lagos", capital: "Ikeja", lga: ["Agege", "Ajeromi-Ifelodun", "Alimosho", "Amuwo-Odofin", "Apapa", "Badagry", "Epe", "Eti Osa", "Ibeju-Lekki", "Ifako-Ijaiye", "Ikeja", "Ikorodu", "Kosofe", "Lagos Island", "Lagos Mainland", "Mushin", "Ojo", "Oshodi-Isolo", "Shomolu", "Surulere"] },
+        { name: "Nasarawa", capital: "Lafia", lga: ["Akwanga", "Awe", "Doma", "Karu", "Keana", "Keffi", "Kokona", "Lafia", "Nasarawa", "Nasarawa Egon", "Obi", "Toto", "Wamba"] },
+        { name: "Niger", capital: "Minna", lga: ["Agaie", "Agwara", "Bida", "Borgu", "Bosso", "Chanchaga", "Edati", "Gbako", "Gurara", "Katcha", "Kontagora", "Lapai", "Lavun", "Magama", "Mariga", "Mashegu", "Mokwa", "Moya", "Paikoro", "Rafi", "Rijau", "Shiroro", "Suleja", "Tafa", "Wushishi"] },
+        { name: "Ogun", capital: "Abeokuta", lga: ["Abeokuta North", "Abeokuta South", "Ado-Odo/Ota", "Egbado North", "Egbado South", "Ewekoro", "Ifo", "Ijebu East", "Ijebu North", "Ijebu North East", "Ijebu Ode", "Ikenne", "Imeko Afon", "Ipokia", "Obafemi Owode", "Odeda", "Odogbolu", "Ogun Waterside", "Remo North", "Shagamu"] },
+        { name: "Ondo", capital: "Akure", lga: ["Akoko North-East", "Akoko North-West", "Akoko South-West", "Akoko South-East", "Akure North", "Akure South", "Ese Odo", "Idanre", "Ifedore", "Ilaje", "Ile Oluji/Okeigbo", "Irele", "Odigbo", "Okitipupa", "Ondo East", "Ondo West", "Ose", "Owo"] },
+        { name: "Osun", capital: "Osogbo", lga: ["Atakunmosa East", "Atakunmosa West", "Aiyedaade", "Aiyedire", "Boluwaduro", "Boripe", "Ede North", "Ede South", "Ife Central", "Ife East", "Ife North", "Ife South", "Egbedore", "Ejigbo", "Ifedayo", "Ifelodun", "Ila", "Ilesa East", "Ilesa West", "Irepodun", "Irewole", "Isokan", "Iwo", "Obokun", "Odo Otin", "Ola Oluwa", "Olorunda", "Oriade", "Orolu", "Osogbo"] },
+        { name: "Oyo", capital: "Ibadan", lga: ["Afijio", "Akinyele", "Atiba", "Atisbo", "Egbeda", "Ibadan North", "Ibadan North-East", "Ibadan North-West", "Ibadan South-East", "Ibadan South-West", "Ibarapa Central", "Ibarapa East", "Ibarapa North", "Ido", "Irepo", "Iseyin", "Itesiwaju", "Iwajowa", "Kajola", "Lagelu", "Ogbomosho North", "Ogbomosho South", "Ogo Oluwa", "Olorunsogo", "Oluyole", "Ona Ara", "Orelope", "Ori Ire", "Oyo East", "Oyo West", "Saki East", "Saki West", "Surulere"] },
+        { name: "Plateau", capital: "Jos", lga: ["Barkin Ladi", "Bassa", "Bokkos", "Jos East", "Jos North", "Jos South", "Kanam", "Kanke", "Langtang North", "Langtang South", "Mangu", "Mikang", "Pankshin", "Qua'an Pan", "Riyom", "Shendam", "Wase"] },
+        { name: "Rivers", capital: "Port Harcourt", lga: ["Abua/Odual", "Ahoada East", "Ahoada West", "Akuku-Toru", "Andoni", "Asari-Toru", "Bonny", "Degema", "Eleme", "Emuoha", "Etche", "Gokana", "Ikwerre", "Khana", "Obio/Akpor", "Ogba/Egbema/Ndoni", "Ogu/Bolo", "Okrika", "Omuma", "Opobo/Nkoro", "Oyigbo", "Port Harcourt", "Tai"] }
+    ]
+    function load_states(){
+        let opt = `<option value=""> -- Select States -- </option>`
+        states.forEach((s,i) => {
+            opt+=`<option value="${i}">${s.name}</option>`
+        });
+        document.querySelector('#states').innerHTML = opt
+    }
+    
+    function load_lga(index){
+       let  opt = `<option value=""> -- Select LGA -- </option>`
+        let lgas = states[index].lga
+        lgas.forEach(l=>{
+            opt+=`<option value="${l}">${l} </option>`
+        })
+        document.querySelector('#lga').innerHTML = opt
+    }
+    
+    load_states()
+
+    
+    text = '<option value=""> -- YEARS -- </option>'
+    let now  = new Date().getFullYear()
+    start = now - 35
+    end = now - 18
+    for(i = start; i<=end; i++){
+        text+=`<option>${i}</option>`
+    }
+    document.querySelector('#years').innerHTML = text
+
+
+    units = [
+        {label:'MINS - SEC', id:'min_sec', solve:function(value){
+            return {
+                value: eval(value * 60),
+                'text': " Mins to Seconds" 
+            }
+        }},
+        {label:'SEC - MINS', id:'min_sec', solve:function(value){
+            return {
+                value: eval(value / 60),
+                'text': "  Seconds to Mins" 
+            }
+        }},
+        {label:'Week to Days', id:'wk_days', solve:function(value){
+            return {
+                value: eval(value * 7),
+                'text': "  Seconds to Mins" 
+            }
+        }},
+    ]
+
+    type_elt = document.querySelector('#type');
+    units.forEach((u,index) =>{
+        type_elt.innerHTML +=`<option value='${index}'> ${u.label} </option>` 
+    })
+    
+    function converter(index){
+        input = document.querySelector('#value').value
+        conversion = units[index]
+        let solve  = conversion.solve(input)
+        // document.querySelector('#text').innerHTML = eval(`${input} ${conversion.op} ${60}`)
+        document.querySelector('#text').innerHTML = solve.text +" = "+ solve.value
+
+    }
+
+sum(10)
+sum(document.querySelector('input').value)
+</script>
+<!-- 
+    1. Load states and lgas accordingly
+    2. load years from 1960 to a year eligible to vote 18 years
+    3. Create a dyanmic unit converter 
+
+-->

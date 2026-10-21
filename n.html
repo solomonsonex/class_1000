@@ -1,0 +1,42 @@
+<ul>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+
+<script>
+    // window object 
+    // user 
+    // user
+    lists = document.querySelectorAll('li') || []
+    lists[0].innerHTML = 'item 1'
+    
+    // alert()
+    // res =  confirm(" Do you want to leave this page ")
+    // lists[0].innerHTML  =  res ? "Your leaving" : "You are staying "
+    // if(res) location.href = 'class.html' 
+
+
+    // age = prompt("How old are you?")
+    // lists[0].innerHTML = age ? `Thank you you are ${age} years old ` :" Please referesh and enter ur age "
+    
+    //
+    document.write(`<br> Screen W: ${screen.width}`)
+    document.write(`<br> Screen W: ${screen.height}`)
+    document.write(`<br> Window H: ${innerHeight}`)
+    document.write(`<br> Window W: ${innerWidth}`)
+    document.write(`<br> Window W: ${location}`)
+    document.write(`<br> Window W: ${location.pathname}`)
+    
+    
+    // storage 
+    localStorage.setItem('item1', "Solomomn") 
+    prev = localStorage.getItem('item1') 
+    document.write(`<br> Local storage: ${prev}`)
+    
+    localStorage.setItem('item1', "") 
+    localStorage.removeItem('item1') 
+    sessionStorage.setItem()
+</script>
