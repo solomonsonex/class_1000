@@ -1,0 +1,78 @@
+<!-- elements -->
+ <style>
+    .box{
+        width:40px;
+        height:40px;
+        background:orange;
+        position:fixed;
+        top:50px;
+        right:40px;
+    }
+ </style>
+ <div class="box"></div>
+<input type="password" id="password"  onkeydown="this.type='text'" onkeyup="this.type='password'">
+<button type="button" id="togglePass"> Toggle pass</button>
+<h1> Loading ...  </h1>
+<h2 id='counter'> </h2>
+<h2 id='rand'> </h2>
+<button  type="button" onclick="time_now()"> refresh</button>
+<button  type="button" id="stopper"> STOP counter </button>
+<script>
+    function time_now(){
+        const now  = new Date();
+        hours = now.getHours()
+        mins = now.getMinutes()
+        sec = now.getSeconds()
+        document.querySelector('h1').innerHTML = `${hours} : ${mins} : ${sec}`
+    }
+
+    const my_interval1  = setInterval(time_now, 1000)
+    
+    i  = 0;
+    const interval1 = setInterval(()=>{
+        i++
+        rand = Math.floor(Math.random() * 9999)
+        document.querySelector('#counter')
+        .innerHTML = i
+        document.querySelector('#rand')
+        .innerHTML = rand
+    },1000)
+
+
+    function stopInterval(){
+        clearInterval(interval1)
+    }
+    // stopInterval()
+    stopper = document.querySelector('#stopper')
+    stopper.addEventListener('click', (e)=>{
+        stopper.innerHTML = 'Stopped'
+        clearInterval(interval1)
+        clearInterval(my_interval1)
+    })
+
+
+
+
+ 
+    togglePass = document.querySelector('#togglePass')
+    togglePass.addEventListener('click', ()=>{
+        input = document.querySelector('#password')
+            togglePass.innerHTML = input.type ==
+            'password' ? 'Hide' : "Show" 
+
+            input.type = "password" =='password' ? 'text':"passwprd"
+    })
+
+
+
+    box = document.querySelector('.box')
+        function displace(){
+            x = Math.floor(Math.random()* Number(innerWidth))
+            y = Math.floor(Math.random() * Number(innerHeight))
+            box.style.top = `${y}px`
+            box.style.left = x+'px'
+            // box.innerHTML =  
+        }
+
+        setInterval(displace,1000)
+</script>
